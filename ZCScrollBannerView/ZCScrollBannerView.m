@@ -8,15 +8,22 @@
 
 #import "ZCScrollBannerView.h"
 
-#import "UIView+Size.h"
+//#import "UIView+Size.h"
 
+#define VIEW_WIDTH      CGRectGetWidth(self.frame)
+#define VIEW_HEIGHT     CGRectGetHeight(self.frame)
 #define PAGECONTROL_HEIGHT 10
+#define PAGE_NUMBER     3
+#define PAGEINDICATOR_WIDTH 20
 
 @interface ZCScrollBannerView () <UIScrollViewDelegate>
 
+@property (nonatomic, assign) CGFloat durationTime;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, strong) UIScrollView *contentView;
+@property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, assign) NSInteger position;
 
 @end
 
@@ -30,36 +37,33 @@
 }
 */
 
-#pragma mark --init
-
-- (instancetype)init {
-    if(self = [super init]) {
-        [self initSetting];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
+#pragma mark --初始化
+- (instancetype)initWithFrame:(CGRect)frame durationTime:(CGFloat)durationTime {
     self = [super initWithFrame:frame];
     if(self) {
-        [self initSetting];
+        _durationTime = durationTime;
+        [self setupContentViewWithFrame:frame];
+        [self startTimer];
     }
     return self;
 }
 
-- (void)initSetting {
-    _contentView = [[UIScrollView alloc]initWithFrame:CGRectZero];
+- (void)setupContentViewWithFrame:(CGRect)frame {
+    _contentView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame))];
     _contentView.showsVerticalScrollIndicator = NO;
     _contentView.showsHorizontalScrollIndicator = NO;
     _contentView.bounces = NO;
     _contentView.pagingEnabled = YES;
     _contentView.delegate = self;
+    _contentView.contentSize = CGSizeMake(PAGE_NUMBER * VIEW_WIDTH, VIEW_HEIGHT);
     [self addSubview:_contentView];
     
     _pageControl = [[UIPageControl alloc]initWithFrame:CGRectZero];
-    [self addSubview:_pageControl];
     
-    _timeInterval = 1;
+    [_pageControl setPageIndicatorTintColor:[UIColor grayColor]];
+    [_pageControl setCurrentPageIndicatorTintColor:[UIColor whiteColor]];
+
+    [self addSubview:_pageControl];
     
 }
 
@@ -67,10 +71,53 @@
     [self stopTimer];
 }
 
+#pragma mark --属性设置
+- (void)setImgList:(NSArray<UIImage *> *)imgList {
+    _imgList = imgList;
+    _currentIndex = 0;
+    if(_imgList) {
+        self.pageControl.frame = CGRectMake(0, CGRectGetHeight(self.frame)- PAGECONTROL_HEIGHT, _imgList.count * PAGEINDICATOR_WIDTH, PAGECONTROL_HEIGHT);
+        [_pageControl setCenter:CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(_pageControl.frame))];
+        [self.pageControl setNumberOfPages:_imgList.count];
+        [self layoutContentView];
+    }
+}
+
+- (void)setIndicatorColor:(UIColor *)indicatorColor {
+    if(self.pageControl){
+        self.pageControl.pageIndicatorTintColor = indicatorColor;
+    }
+}
+
+- (void)setCurrentIndicatorColor:(UIColor *)currentIndicatorColor {
+    if(self.pageControl) {
+        self.pageControl.currentPageIndicatorTintColor = currentIndicatorColor;
+    }
+}
+
+- (NSInteger)previousViewIndex:(NSInteger)currentIndex {
+    if(currentIndex == 0) {
+        return self.imgList.count - 1;
+    }
+    return currentIndex - 1;;
+}
+
+- (NSInteger)nextViewIndex:(NSInteger)currentIndex {
+    if(currentIndex == self.imgList.count - 1) {
+        return 0;
+    }
+    return currentIndex + 1;
+}
+
+
+
+#pragma mark --定时器
 - (void)startTimer {
-    [self stopTimer];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:self.timeInterval target:self selector:@selector(circle) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    if(self.durationTime > 0) {
+        [self stopTimer];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:self.durationTime target:self selector:@selector(circle) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
 }
 
 - (void)stopTimer {
@@ -81,47 +128,57 @@
 }
 
 - (void)circle {
-    NSInteger currentPage = _pageControl.currentPage;
-    if(currentPage < _imgList.count - 1) {
-        currentPage++;
-    }
-    else {
-        currentPage = 0;
-    }
-    [_contentView setContentOffset:CGPointMake(currentPage * self.width, 0) animated:YES];
+    NSInteger index = (self.contentView.contentOffset.x + VIEW_WIDTH)/VIEW_WIDTH;
+    [_contentView setContentOffset:CGPointMake(index * VIEW_WIDTH, 0) animated:YES];
 }
 
-#pragma mark --Layout
-- (void)layoutSubviews {
-    [super layoutSubviews];
+#pragma mark --布局
+- (void)layoutContentView {
+    [_contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
-    [_contentView setFrame:CGRectMake(0, 0, self.width, self.height)];
-    [_pageControl setFrame:CGRectMake(0, self.height - PAGECONTROL_HEIGHT, 100, PAGECONTROL_HEIGHT)];
-    [_pageControl setCenterX:self.width/2];
-    [_pageControl setPageIndicatorTintColor:_indicatorColor];
-    [_pageControl setCurrentPageIndicatorTintColor:_currentIndicatorColor];
-
     //展示的图片存在
-    if(_imgList) {
-        _contentView.contentSize = CGSizeMake(_imgList.count * self.width, self.height);
-        [_pageControl setNumberOfPages:_imgList.count];
-        [_pageControl setCurrentPage:0];
-        
-        for(int i = 0; i < _imgList.count; i++) {
-            UIImageView *imgView = [[UIImageView alloc]initWithImage:_imgList[i]];
-            [imgView setFrame:CGRectMake(i * self.width, 0, self.width, self.height)];
-            [_contentView addSubview:imgView];
-        }
-        [self startTimer];
-    }
-}
+    [self.pageControl setCurrentPage:self.currentIndex];
 
+    NSInteger previousIndex = [self previousViewIndex:self.currentIndex];
+    NSInteger nextIndex = [self nextViewIndex:self.currentIndex];
+    
+    UIImageView *previousImageView = [[UIImageView alloc] initWithImage:self.imgList[previousIndex]];
+    previousImageView.frame = CGRectMake(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+    [self.contentView addSubview:previousImageView];
+    
+    UIImageView *currentImageView = [[UIImageView alloc] initWithImage:self.imgList[self.currentIndex]];
+    currentImageView.frame = CGRectMake(VIEW_WIDTH, 0, VIEW_WIDTH, VIEW_HEIGHT);
+    [self.contentView addSubview:currentImageView];
+    
+    UIImageView *nextImageView = [[UIImageView alloc] initWithImage:self.imgList[nextIndex]];
+    nextImageView.frame = CGRectMake(2 * VIEW_WIDTH, 0, VIEW_WIDTH, VIEW_HEIGHT);
+    [self.contentView addSubview:nextImageView];
+    
+    self.contentView.contentOffset = CGPointMake(VIEW_WIDTH, 0);
+    
+    [self startTimer];
+}
 
 #pragma mark -- UIScrollViewDelegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.timer setFireDate:[NSDate distantFuture]];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [self.timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:self.durationTime]];
+}
+
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    //浮点数结果转换为整数，会抹掉小数部分取整数。为保障页面偏移到屏幕一半时，进入到下一页，进行如下运算
-    NSInteger currentPage = (scrollView.contentOffset.x + self.width *0.5)/ self.width;
-    _pageControl.currentPage = currentPage;
+    CGPoint offSet = scrollView.contentOffset;
+    if(offSet.x <= 0) {
+        self.currentIndex = [self previousViewIndex:self.currentIndex];
+        [self layoutContentView];
+    }
+    else if(offSet.x >= (PAGE_NUMBER - 1) * VIEW_WIDTH) {
+        self.currentIndex = [self nextViewIndex:self.currentIndex];
+        [self layoutContentView];
+    }
 }
 
 @end

@@ -28,11 +28,8 @@
         [array addObject:image];
     }
     
-    ZCScrollBannerView *bannerView = [[ZCScrollBannerView alloc]initWithFrame:CGRectMake(0, 100, self.view.width, 100)];
-    bannerView.backgroundColor = [UIColor redColor];
+    ZCScrollBannerView *bannerView = [[ZCScrollBannerView alloc]initWithFrame:CGRectMake(0, 100, self.view.width, 100) durationTime:3.f];
     [bannerView setImgList:array];
-    [bannerView setTimeInterval:3.0];
-//    [bannerView setIndicatorColor:[UIColor redColor]];
     [self.view addSubview:bannerView];
 }
 

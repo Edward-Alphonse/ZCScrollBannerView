@@ -11,8 +11,9 @@
 @interface ZCScrollBannerView : UIView
 
 @property (nonatomic, strong) NSArray<UIImage *> *imgList;
-@property (nonatomic, assign) CGFloat timeInterval;
 @property (nonatomic, strong) UIColor *indicatorColor;
 @property (nonatomic, strong) UIColor *currentIndicatorColor;
+
+- (instancetype)initWithFrame:(CGRect)frame durationTime:(CGFloat)durationTime;
 
 @end
