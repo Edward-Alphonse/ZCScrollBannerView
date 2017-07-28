@@ -34,27 +34,6 @@
 			remoteGlobalIDString = E6C7E4431E56A36B0090F406;
 			remoteInfo = ZCScrollBannerView;
 		};
-		E6C7E4861E56AC6F0090F406 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C7E47A1E56AC6F0090F406 /* ZCBannerView.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E67E17281E55FEF500198C11;
-			remoteInfo = ZCBannerView;
-		};
-		E6C7E4881E56AC6F0090F406 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C7E47A1E56AC6F0090F406 /* ZCBannerView.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E67E17411E55FEF500198C11;
-			remoteInfo = ZCBannerViewTests;
-		};
-		E6C7E48A1E56AC6F0090F406 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C7E47A1E56AC6F0090F406 /* ZCBannerView.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E67E174C1E55FEF500198C11;
-			remoteInfo = ZCBannerViewUITests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -74,7 +53,6 @@
 		E6C7E4681E56A36B0090F406 /* ZCScrollBannerViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZCScrollBannerViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6C7E46C1E56A36B0090F406 /* ZCScrollBannerViewUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZCScrollBannerViewUITests.m; sourceTree = "<group>"; };
 		E6C7E46E1E56A36B0090F406 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E6C7E47A1E56AC6F0090F406 /* ZCBannerView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ZCBannerView.xcodeproj; sourceTree = "<group>"; };
 		E6C7E47D1E56AC6F0090F406 /* UIView+Size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Size.h"; sourceTree = "<group>"; };
 		E6C7E47E1E56AC6F0090F406 /* UIView+Size.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Size.m"; sourceTree = "<group>"; };
 		E6C7E47F1E56AC6F0090F406 /* ZCScrollBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCScrollBannerView.h; sourceTree = "<group>"; };
@@ -133,7 +111,6 @@
 				E6C7E44B1E56A36B0090F406 /* AppDelegate.m */,
 				E6C7E44D1E56A36B0090F406 /* ViewController.h */,
 				E6C7E44E1E56A36B0090F406 /* ViewController.m */,
-				E6C7E47A1E56AC6F0090F406 /* ZCBannerView.xcodeproj */,
 				E6C7E47D1E56AC6F0090F406 /* UIView+Size.h */,
 				E6C7E47E1E56AC6F0090F406 /* UIView+Size.m */,
 				E6C7E47F1E56AC6F0090F406 /* ZCScrollBannerView.h */,
@@ -171,16 +148,6 @@
 				E6C7E46E1E56A36B0090F406 /* Info.plist */,
 			);
 			path = ZCScrollBannerViewUITests;
-			sourceTree = "<group>";
-		};
-		E6C7E47B1E56AC6F0090F406 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E6C7E4871E56AC6F0090F406 /* ZCBannerView.app */,
-				E6C7E4891E56AC6F0090F406 /* ZCBannerViewTests.xctest */,
-				E6C7E48B1E56AC6F0090F406 /* ZCBannerViewUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,12 +242,6 @@
 			mainGroup = E6C7E43B1E56A36B0090F406;
 			productRefGroup = E6C7E4451E56A36B0090F406 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E6C7E47B1E56AC6F0090F406 /* Products */;
-					ProjectRef = E6C7E47A1E56AC6F0090F406 /* ZCBannerView.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				E6C7E4431E56A36B0090F406 /* ZCScrollBannerView */,
@@ -289,30 +250,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		E6C7E4871E56AC6F0090F406 /* ZCBannerView.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = ZCBannerView.app;
-			remoteRef = E6C7E4861E56AC6F0090F406 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E6C7E4891E56AC6F0090F406 /* ZCBannerViewTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ZCBannerViewTests.xctest;
-			remoteRef = E6C7E4881E56AC6F0090F406 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E6C7E48B1E56AC6F0090F406 /* ZCBannerViewUITests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ZCBannerViewUITests.xctest;
-			remoteRef = E6C7E48A1E56AC6F0090F406 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E6C7E4421E56A36B0090F406 /* Resources */ = {
